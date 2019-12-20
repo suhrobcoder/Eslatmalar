@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Eslatmalar</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="settings">Settings</string>
+    <string name="add_note">Eslatma qo`shish</string>
+    <string name="eslatma_nomi">Eslatma nomi</string>
+    <string name="event_date">Eslatma sanasi</string>
+    <string name="event_content">Eslatma matni</string>
+    <string name="event_time">Eslatish vaqti</string>
+    <string name="save">Saqlash</string>
+    <string name="takrorlanish_turi">Takrorlanish turi: Bir marta</string>
+    <string name="everyday">Har kuni</string>
+    <string name="week">Hafta bo`yicha</string>
+    <string name="month">Oy bo`yicha</string>
+    <string name="takrorlanish_turi1">Takrorlanish turi</string>
+    <string name="search">Izlash</string>
+    <string name="ovqatlanish_demo">Ovqatlanish</string>
+    <string name="har_kuni_ertalab_ovqatlanish_demo">Har kuni ertalab ovqatlanish</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="once">Bir marta</string>
+    <string name="eslatish_sanasi">Eslatish sanasi</string>
+</resources>
