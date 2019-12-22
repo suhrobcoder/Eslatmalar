@@ -41,13 +41,14 @@
 
         </LinearLayout>
 
-        <CheckBox
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/active_checkbox"/>
+            android:src="@drawable/ic_alarm_on_black_24dp"
+            android:id="@+id/alarm_switch_btn"/>
 
     </android.support.constraint.ConstraintLayout>
 

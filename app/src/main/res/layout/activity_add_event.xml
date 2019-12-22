@@ -39,40 +39,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/event_date_l"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingBottom="10dp"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:id="@+id/event_date"
-                android:layout_width="wrap_content"
-                android:layout_height="23dp"
-                android:text="@string/eslatish_sanasi"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigate_next_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="5dp"
-                tools:ignore="ContentDescription" />
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
             android:id="@+id/event_time_l"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,7 +106,119 @@
 
         </android.support.constraint.ConstraintLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7"
+            android:id="@+id/week_btns_layout"
+            android:visibility="gone">
 
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="DU"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/du_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="SE"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/se_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="CH"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/ch_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="PA"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/pa_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="JU"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/ju_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="SH"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/sh_week_btn"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="YA"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:id="@+id/ya_week_btn"
+                android:textSize="20sp"
+                />
+
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/event_date_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/event_date"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:text="@string/eslatish_sanasi"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_navigate_next_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="5dp"
+                tools:ignore="ContentDescription" />
+
+        </android.support.constraint.ConstraintLayout>
 
 
 

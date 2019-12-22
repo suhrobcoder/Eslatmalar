@@ -12,14 +12,18 @@ public class Notify {
     public Notify() {
     }
 
-    public Notify(int id, int eventId) {
+    public Notify(int eventId) {
 
-        this.id = id;
         this.eventId = eventId;
     }
 
     public int getId() {
         return id;
+    }
+
+    public Notify(int id, int eventId) {
+        this.id = id;
+        this.eventId = eventId;
     }
 
     public void setId(int id) {

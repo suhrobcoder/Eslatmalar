@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -24,18 +26,24 @@ import uz.suhrob.eslatmalar.database.EventDBHelper;
 import uz.suhrob.eslatmalar.models.Date;
 import uz.suhrob.eslatmalar.models.Event;
 import uz.suhrob.eslatmalar.models.EventType;
+import uz.suhrob.eslatmalar.models.Frequency;
+import uz.suhrob.eslatmalar.models.Notify;
 import uz.suhrob.eslatmalar.models.Time;
 
 public class AddEventActivity extends AppCompatActivity implements ActionBottomSheetDialogFragment.ItemClickListener {
 
     TextInputEditText eventTitleText, eventContentText;
     TextView eventDateText, eventTimeText, repeatType;
-    Button saveButton;
+    Button saveButton, weekButtons[];
     ConstraintLayout eventType, eventTimeLay, eventDateLay;
+    LinearLayout weekLayout;
 
     String[] months = {"Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"};
+    boolean checkedDays[] = {false, false, false, false, false, false, false};
 
     Event event;
+
+    Calendar settedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,18 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         event = new Event();
         event.setActive(true);
         event.setType(EventType.ONCE);
+
+        weekLayout = findViewById(R.id.week_btns_layout);
+        weekButtons = new Button[7];
+        weekButtons[0] = findViewById(R.id.du_week_btn);
+        weekButtons[1] = findViewById(R.id.se_week_btn);
+        weekButtons[2] = findViewById(R.id.ch_week_btn);
+        weekButtons[3] = findViewById(R.id.pa_week_btn);
+        weekButtons[4] = findViewById(R.id.ju_week_btn);
+        weekButtons[5] = findViewById(R.id.sh_week_btn);
+        weekButtons[6] = findViewById(R.id.ya_week_btn);
+
+        settedTime = Calendar.getInstance();
 
 
         final Calendar calendar = Calendar.getInstance();
@@ -95,14 +115,42 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
                 }
                 event.setName(title);
                 event.setContent(eventContentText.getText().toString().trim());
-                event.setFrequency();
-                if (new EventDBHelper(getApplicationContext()).insertData(event)) {
+                Frequency frequency = new Frequency();
+                if (event.getType().equals(EventType.WEEKLY.name())) {
+                    for (int i=0; i<7; i++) {
+                        if (checkedDays[i]) {
+                            frequency.add(i+1);
+                        }
+                    }
+                    event.setFrequency(frequency);
+                } else {
+                    event.setFrequency();
+                }
+                long event_id = new EventDBHelper(getApplicationContext()).insertData(event);
+                if (event_id > 0) {
+                    EventAlarm alarm = new EventAlarm();
+                    if (event.getType().equals(EventType.WEEKLY.name())) {
+                        alarm.setAlarm(getApplicationContext(), whenNextAlarm(event), event.getName(), event.getContent(), (int)new EventDBHelper(getApplicationContext()).insertNotify(new Notify((int)event_id)));
+                    } else {
+                        if (settedTime.getTimeInMillis() < System.currentTimeMillis()) {
+                            settedTime.setTimeInMillis(settedTime.getTimeInMillis() + 86400*1000);
+                        }
+                        alarm.setAlarm(getApplicationContext(), settedTime, event.getName(), event.getContent(), (int)new EventDBHelper(getApplicationContext()).insertNotify(new Notify((int)event_id)));
+                    }
                     insertedDialog();
                 }
-                EventAlarm alarm = new EventAlarm();
-                alarm.setAlarm(getApplicationContext(), Calendar.getInstance(), event.getName(), event.getContent(), 1);
             }
         });
+
+        for (int i=0; i<7; i++) {
+            final int j = i;
+            weekButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    weekBtnClicked(j);
+                }
+            });
+        }
 
     }
 
@@ -115,10 +163,23 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
     public void onItemClick(String item) {
         if (item.equals(getResources().getString(R.string.everyday))) {
             event.setType(EventType.EVERYDAY);
+            weekLayout.setVisibility(View.GONE);
+            for (int i=0; i<7; i++) {
+                if (checkedDays[i]) {
+                    weekBtnClicked(i);
+                }
+            }
         } else if (item.equals(getResources().getString(R.string.week))) {
             event.setType(EventType.WEEKLY);
+            weekLayout.setVisibility(View.VISIBLE);
         } else if (item.equals(getResources().getString(R.string.once))) {
             event.setType(EventType.ONCE);
+            weekLayout.setVisibility(View.GONE);
+            for (int i=0; i<7; i++) {
+                if (checkedDays[i]) {
+                    weekBtnClicked(i);
+                }
+            }
         }
         repeatType.setText(getResources().getString(R.string.takrorlanish_turi1) + ": " + item);
     }
@@ -129,18 +190,23 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 eventTimeText.setText(getResources().getString(R.string.event_time) + ": " + (hour > 9 ? hour : "0" + hour) + ":" + (minute > 9 ? minute : "0" + minute));
                 event.setTime(new Time(hour, minute));
+                settedTime.set(Calendar.HOUR, hour);
+                settedTime.set(Calendar.MINUTE, minute);
             }
         }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
-    public void showDatePickerDialog(Calendar calendar) {
+    public void showDatePickerDialog(final Calendar calendar) {
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 // TODO: korish kerak
-                eventDateText.setText("Eslatish sanasi: " + i1 + "-" + i1 + "-" + i);
+                eventDateText.setText("Eslatish sanasi: " + i2 + "-" + months[i1] + " " + i + "-yil");
                 event.setDate(new Date(i, i1, i2));
+                settedTime.set(Calendar.YEAR, i);
+                settedTime.set(Calendar.MONTH, i1);
+                settedTime.set(Calendar.DAY_OF_MONTH, i2);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
@@ -164,6 +230,39 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
             }
         });
         dialogBuilder.create().show();
+    }
+
+    public void weekBtnClicked(int j) {
+        if (checkedDays[j]) {
+            weekButtons[j].setBackgroundColor(Color.WHITE);
+            checkedDays[j] = false;
+        } else {
+            weekButtons[j].setBackgroundColor(Color.parseColor("#dfdfdf"));
+            checkedDays[j] = true;
+        }
+    }
+
+    public static Calendar whenNextAlarm(Event event) {
+        Calendar calendar = Calendar.getInstance();
+        Calendar eventDate = Calendar.getInstance();
+        eventDate.set(Calendar.HOUR, event.getTime1().getHour());
+        eventDate.set(Calendar.MINUTE, event.getTime1().getMinute());
+        calendar.set(Calendar.HOUR, event.getTime1().getHour());
+        calendar.set(Calendar.MINUTE, event.getTime1().getMinute());
+        while (!isPossibleDate(calendar, event.getFrequency1())) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400*1000);
+        }
+        return calendar;
+    }
+
+    public static boolean isPossibleDate(Calendar calendar, Frequency frequency) {
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) return false;
+        for (int x: frequency.getAll()) {
+            int x1 = (x+1) % 7;
+            if (x1 == 0) x1 = 7;
+            if (calendar.get(Calendar.DAY_OF_WEEK) == x1) return true;
+        }
+        return false;
     }
 
 }

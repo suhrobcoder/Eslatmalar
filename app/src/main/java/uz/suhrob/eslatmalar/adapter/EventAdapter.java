@@ -2,13 +2,18 @@ package uz.suhrob.eslatmalar.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uz.suhrob.eslatmalar.R;
@@ -19,13 +24,15 @@ import uz.suhrob.eslatmalar.models.Event;
  * Created by User on 17.12.2019.
  */
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> implements Filterable {
 
     private List<Event> eventList;
-    Context context;
+    private List<Event> fullList;
+    private Context context;
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.eventList = eventList;
+        this.fullList = eventList;
         this.context = context;
     }
 
@@ -36,18 +43,43 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(EventAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(EventAdapter.ViewHolder holder, int position) {
         holder.itemName.setText(eventList.get(position).getName());
         holder.itemContent.setText(eventList.get(position).getContent());
-        holder.activeCheckBox.setChecked(eventList.get(position).isActive());
+        if (!eventList.get(position).isActive()) {
+            holder.alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+        }
 
-        holder.activeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final int pos = position;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                new EventDBHelper(context).changeActive(eventList.get(position).getId(), b);
-                eventList.get(position).setActive(b);
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String string = charSequence.toString().trim();
+                List<Event> filteredList = new ArrayList<>();
+                if (string.isEmpty()) {
+                    filteredList = fullList;
+                } else {
+                    for (Event event: fullList) {
+                        if (event.getName().toLowerCase().contains(string.toLowerCase()) || event.getContent().toLowerCase().contains(string.toLowerCase())) {
+                            filteredList.add(event);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
             }
-        });
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                eventList = (ArrayList<Event>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @Override
@@ -58,13 +90,32 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView itemName, itemContent;
-        CheckBox activeCheckBox;
+        ImageView alarmSwitchBtn;
 
         ViewHolder(View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
             itemContent = itemView.findViewById(R.id.item_content);
-            activeCheckBox = itemView.findViewById(R.id.active_checkbox);
+            alarmSwitchBtn = itemView.findViewById(R.id.alarm_switch_btn);
+
+            alarmSwitchBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int itemPos = getAdapterPosition();
+                    if (eventList.get(itemPos).isActive()) {
+                        eventList.get(itemPos).setActive(false);
+                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                        new EventDBHelper(context).changeActive(eventList.get(itemPos).getId(), false);
+                        Log.d("AdapterChanges", eventList.get(itemPos).getName() + " is deactivated");
+                    } else {
+                        eventList.get(itemPos).setActive(true);
+                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+                        new EventDBHelper(context).changeActive(eventList.get(itemPos).getId(), true);
+                        Log.d("AdapterChanges", eventList.get(itemPos).getName() + " is activated");
+                    }
+                    notifyItemChanged(itemPos);
+                }
+            });
         }
     }
 }

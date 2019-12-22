@@ -24,8 +24,11 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import uz.suhrob.eslatmalar.database.EventDBHelper;
 import uz.suhrob.eslatmalar.models.Date;
 import uz.suhrob.eslatmalar.models.Event;
+import uz.suhrob.eslatmalar.models.EventType;
+import uz.suhrob.eslatmalar.models.Notify;
 
 /**
  * Created by User on 17.12.2019.
@@ -41,18 +44,19 @@ public class EventAlarm extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Suhrob");
-        wl.acquire(1000L /*10 minutes*/);
+        wl.acquire(1000L);
 
         String eventName = intent.getExtras().getString(EVENT_NAME);
         String eventContent = intent.getExtras().getString(EVENT_CONTENT);
 
         int notificationId = intent.getExtras().getInt(NOTIFICATION_ID);
+        Calendar calendar = Calendar.getInstance();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setContentTitle(eventName)
-                .setContentText(eventContent)
+                .setContentText("" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + " da." + eventContent)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         Uri path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -69,13 +73,22 @@ public class EventAlarm extends BroadcastReceiver {
             manager.notify(notificationId, builder.build());
         }
 
+        EventDBHelper dbHelper = new EventDBHelper(context);
+        Notify notify = dbHelper.getNotify(notificationId);
+        dbHelper.deleteNotify(notificationId);
+        long new_id = dbHelper.insertNotify(notify);
+        Event event = dbHelper.getOne(notify.getEventId());
+        if (event.getType().equals(EventType.WEEKLY.name())) {
+            calendar = AddEventActivity.whenNextAlarm(event);
+        } else {
+            calendar.setTimeInMillis(System.currentTimeMillis() + 86400*1000);
+        }
+
 
         wl.release();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis() + 86400*1000);
 
-        setAlarm(context, calendar, eventName, eventContent, notificationId);
+        setAlarm(context, calendar, eventName, eventContent, (int)new_id);
     }
 
     public void setAlarm(Context context, Calendar calendar, String name, String content, int id) {
@@ -84,7 +97,7 @@ public class EventAlarm extends BroadcastReceiver {
         intent.putExtra(EVENT_NAME, name);
         intent.putExtra(EVENT_CONTENT, content);
         intent.putExtra(NOTIFICATION_ID, id);
-        PendingIntent pi = PendingIntent.getBroadcast(context, id, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(context, (int)id, intent, 0);
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
         }
@@ -94,6 +107,8 @@ public class EventAlarm extends BroadcastReceiver {
         Intent intent = new Intent(context, EventAlarm.class);
         PendingIntent sender = PendingIntent.getBroadcast(context, id, intent, 0);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        EventDBHelper dbHelper = new EventDBHelper(context);
+        dbHelper.deleteNotify(id);
         if (alarmManager != null) {
             alarmManager.cancel(sender);
         }

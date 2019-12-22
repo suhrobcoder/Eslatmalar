@@ -56,7 +56,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean insertData(Event event) {
+    public long insertData(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(EVENT_TYPE, event.getType());
@@ -66,10 +66,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
         cv.put(TIME, event.getTime());
         cv.put(IS_ACTIVE, event.isActive() ? 1 : 0);
         long id = db.insert(TABLE_NAME, null, cv);
-        boolean inserted = id > 0;
         Log.d("DBHelper", ""+id);
         db.close();
-        return inserted;
+        return id;
     }
 
     public List<Event> getAll() {
@@ -159,9 +158,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return new Notify(id, cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
     }
 
-    public boolean deleteNotify(int id) {
+    public void deleteNotify(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME2, ID + " = ?", new String[]{Integer.toString(id)}) > 0;
+        db.delete(TABLE_NAME2, ID + " = ?", new String[]{Integer.toString(id)});
     }
 
     // TODO: get(, update)

@@ -59,8 +59,16 @@ public class Event {
         return frequency.toString();
     }
 
+    public Frequency getFrequency1() {
+        return this.frequency;
+    }
+
     public void setFrequency(String frequency1) {
         this.frequency.fromString(frequency1);
+    }
+
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
     }
 
     public void setFrequency() {
@@ -100,6 +108,10 @@ public class Event {
 
     public String getTime() {
         return time.toString();
+    }
+
+    public Time getTime1() {
+        return this.time;
     }
 
     public void setTime(String s) {

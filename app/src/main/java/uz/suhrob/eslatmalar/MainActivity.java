@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
+import java.util.Calendar;
 import java.util.List;
 
 import uz.suhrob.eslatmalar.adapter.EventAdapter;
@@ -41,11 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
     EventDBHelper eventDbHelper;
 
+    EventAdapter eventAdapter;
+
     @Override
     protected void onResume() {
         super.onResume();
         eventList = eventDbHelper.getAll();
-        recyclerView.setAdapter(new EventAdapter(getApplicationContext(), eventList));
+        eventAdapter = new EventAdapter(getApplicationContext(), eventList);
+        recyclerView.setAdapter(eventAdapter);
+        eventAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -61,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         eventDbHelper = new EventDBHelper(getApplicationContext());
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(new EventAdapter(getApplicationContext(), eventList));
 
         //  BottomNavigationBar
         spaceNavigationView = findViewById(R.id.space);
@@ -95,35 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        // -----------------------------------------
+        // --------------------------------------
 
-        // TODO: Tekshirib ochirish kerak
-        // TODO: Ishladi
 
-//        int notificationId = 0;
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-//                .setContentText(getResources().getString(R.string.app_name))
-//                .setContentText("Notofication")
-//                .setAutoCancel(true)
-//                .setDefaults(NotificationCompat.DEFAULT_ALL);
-//        Uri path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        builder.setSound(path);
-//        NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel notificationChannel = new NotificationChannel("ID",
-//                    "Channel human readable title",
-//                    NotificationManager.IMPORTANCE_DEFAULT);
-//            manager.createNotificationChannel(notificationChannel);
-//            builder.setChannelId("ID");
-//        }
-//        if (manager != null) {
-//            manager.notify(notificationId, builder.build());
-//        }
-//
-//        EventAlarm alarm = new EventAlarm();
-//        alarm.setAlarm(getApplicationContext());
 
     }
 
@@ -148,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onQueryTextChange(String newText) {
                     newText = newText.trim();
                     if (!newText.isEmpty()) {
-                        // TODO: Text ozgarganda RecyclerView ni filtrlash
+                        eventAdapter.getFilter().filter(newText);
                     }
                     return false;
                 }
