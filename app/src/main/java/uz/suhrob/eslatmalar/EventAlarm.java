@@ -88,7 +88,9 @@ public class EventAlarm extends BroadcastReceiver {
         wl.release();
 
 
-        setAlarm(context, calendar, eventName, eventContent, (int)new_id);
+        if (!event.getType().equals(EventType.ONCE.name())) {
+            setAlarm(context, calendar, eventName, eventContent, (int)new_id);
+        }
     }
 
     public void setAlarm(Context context, Calendar calendar, String name, String content, int id) {
@@ -97,10 +99,12 @@ public class EventAlarm extends BroadcastReceiver {
         intent.putExtra(EVENT_NAME, name);
         intent.putExtra(EVENT_CONTENT, content);
         intent.putExtra(NOTIFICATION_ID, id);
-        PendingIntent pi = PendingIntent.getBroadcast(context, (int)id, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(context, id, intent, 0);
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
         }
+
+        Log.d("AlarmTime", calendar.toString());
     }
 
     public void cancelAlarm(Context context, int id) {

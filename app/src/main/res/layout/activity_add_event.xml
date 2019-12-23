@@ -122,6 +122,7 @@
                 android:background="#fff"
                 android:id="@+id/du_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -132,6 +133,7 @@
                 android:background="#fff"
                 android:id="@+id/se_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -142,6 +144,7 @@
                 android:background="#fff"
                 android:id="@+id/ch_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -152,6 +155,7 @@
                 android:background="#fff"
                 android:id="@+id/pa_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -162,6 +166,7 @@
                 android:background="#fff"
                 android:id="@+id/ju_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -172,6 +177,7 @@
                 android:background="#fff"
                 android:id="@+id/sh_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
             <Button
@@ -182,6 +188,7 @@
                 android:background="#fff"
                 android:id="@+id/ya_week_btn"
                 android:textSize="20sp"
+                style="?attr/buttonBarButtonStyle"
                 />
 
         </LinearLayout>

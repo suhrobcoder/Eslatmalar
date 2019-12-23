@@ -158,6 +158,13 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return new Notify(id, cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
     }
 
+    public int getNotifyIdWithEventId(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + ID + " FROM " + TABLE_NAME2 + " WHERE " + EVENT_ID + "=" + id, null);
+        cursor.moveToFirst();
+        return cursor.getInt(cursor.getColumnIndex(ID));
+    }
+
     public void deleteNotify(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME2, ID + " = ?", new String[]{Integer.toString(id)});

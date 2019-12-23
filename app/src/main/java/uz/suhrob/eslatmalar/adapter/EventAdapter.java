@@ -16,9 +16,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import uz.suhrob.eslatmalar.AddEventActivity;
+import uz.suhrob.eslatmalar.EventAlarm;
 import uz.suhrob.eslatmalar.R;
 import uz.suhrob.eslatmalar.database.EventDBHelper;
 import uz.suhrob.eslatmalar.models.Event;
+import uz.suhrob.eslatmalar.models.Notify;
 
 /**
  * Created by User on 17.12.2019.
@@ -27,12 +30,10 @@ import uz.suhrob.eslatmalar.models.Event;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> implements Filterable {
 
     private List<Event> eventList;
-    private List<Event> fullList;
     private Context context;
 
     public EventAdapter(Context context, List<Event> eventList) {
         this.eventList = eventList;
-        this.fullList = eventList;
         this.context = context;
     }
 
@@ -49,8 +50,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         if (!eventList.get(position).isActive()) {
             holder.alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
         }
-
-        final int pos = position;
     }
 
     @Override
@@ -61,9 +60,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 String string = charSequence.toString().trim();
                 List<Event> filteredList = new ArrayList<>();
                 if (string.isEmpty()) {
-                    filteredList = fullList;
+                    filteredList = eventList;
                 } else {
-                    for (Event event: fullList) {
+                    for (Event event: eventList) {
                         if (event.getName().toLowerCase().contains(string.toLowerCase()) || event.getContent().toLowerCase().contains(string.toLowerCase())) {
                             filteredList.add(event);
                         }
@@ -97,7 +96,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             itemName = itemView.findViewById(R.id.item_name);
             itemContent = itemView.findViewById(R.id.item_content);
             alarmSwitchBtn = itemView.findViewById(R.id.alarm_switch_btn);
-
             alarmSwitchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -105,15 +103,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     if (eventList.get(itemPos).isActive()) {
                         eventList.get(itemPos).setActive(false);
                         alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
-                        new EventDBHelper(context).changeActive(eventList.get(itemPos).getId(), false);
+                        EventDBHelper dbHelper = new EventDBHelper(context);
+                        dbHelper.changeActive(eventList.get(itemPos).getId(), false);
+                        int notifyId = dbHelper.getNotifyIdWithEventId(eventList.get(itemPos).getId());
+                        dbHelper.deleteNotify(notifyId);
+                        new EventAlarm().cancelAlarm(context, notifyId);
                         Log.d("AdapterChanges", eventList.get(itemPos).getName() + " is deactivated");
                     } else {
                         eventList.get(itemPos).setActive(true);
                         alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_on_black_24dp);
-                        new EventDBHelper(context).changeActive(eventList.get(itemPos).getId(), true);
+                        EventDBHelper dbHelper = new EventDBHelper(context);
+                        dbHelper.changeActive(eventList.get(itemPos).getId(), true);
+                        int notifyId = (int)dbHelper.insertNotify(new Notify(eventList.get(itemPos).getId()));
+                        new EventAlarm().setAlarm(context, AddEventActivity.whenNextAlarm(eventList.get(itemPos)), eventList.get(itemPos).getName(), eventList.get(itemPos).getContent(), notifyId);
                         Log.d("AdapterChanges", eventList.get(itemPos).getName() + " is activated");
                     }
-                    notifyItemChanged(itemPos);
                 }
             });
         }

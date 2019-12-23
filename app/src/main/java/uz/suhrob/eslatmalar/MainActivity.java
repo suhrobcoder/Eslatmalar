@@ -61,14 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
         homeWindow = findViewById(R.id.home_window);
         settingsWindow = findViewById(R.id.settings_window);
-
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
         eventDbHelper = new EventDBHelper(getApplicationContext());
 
-        //  BottomNavigationBar
         spaceNavigationView = findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("HOME", R.drawable.ic_home_black_24dp));
@@ -93,11 +90,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemReselected(int itemIndex, String itemName) {
-
-            }
+            public void onItemReselected(int itemIndex, String itemName) {}
         });
-        // --------------------------------------
 
 
 

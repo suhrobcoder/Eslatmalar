@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -192,6 +193,7 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
                 event.setTime(new Time(hour, minute));
                 settedTime.set(Calendar.HOUR, hour);
                 settedTime.set(Calendar.MINUTE, minute);
+                Log.d("TimeDialog", ""+hour + " " + minute);
             }
         }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
         dialog.show();
@@ -242,13 +244,12 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         }
     }
 
+    // TODO: Calendarni 24 soatlikka otkazish
     public static Calendar whenNextAlarm(Event event) {
         Calendar calendar = Calendar.getInstance();
-        Calendar eventDate = Calendar.getInstance();
-        eventDate.set(Calendar.HOUR, event.getTime1().getHour());
-        eventDate.set(Calendar.MINUTE, event.getTime1().getMinute());
         calendar.set(Calendar.HOUR, event.getTime1().getHour());
         calendar.set(Calendar.MINUTE, event.getTime1().getMinute());
+        Log.d("TimeDialog", ""+calendar.get(Calendar.HOUR));
         while (!isPossibleDate(calendar, event.getFrequency1())) {
             calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400*1000);
         }
