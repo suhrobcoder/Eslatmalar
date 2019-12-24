@@ -1,8 +1,6 @@
 package uz.suhrob.eslatmalar;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,19 +11,13 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.text.format.Formatter;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import uz.suhrob.eslatmalar.database.EventDBHelper;
-import uz.suhrob.eslatmalar.models.Date;
 import uz.suhrob.eslatmalar.models.Event;
 import uz.suhrob.eslatmalar.models.EventType;
 import uz.suhrob.eslatmalar.models.Notify;
@@ -53,10 +45,10 @@ public class EventAlarm extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
                 .setContentTitle(eventName)
-                .setContentText("" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + " da." + eventContent)
+                .setContentText("" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + " da." + eventContent)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         Uri path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

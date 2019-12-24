@@ -1,22 +1,14 @@
 package uz.suhrob.eslatmalar;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +18,6 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
-import java.util.Calendar;
 import java.util.List;
 
 import uz.suhrob.eslatmalar.adapter.EventAdapter;
@@ -48,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        eventList = eventDbHelper.getAll();
-        eventAdapter = new EventAdapter(getApplicationContext(), eventList);
-        recyclerView.setAdapter(eventAdapter);
-        eventAdapter.notifyDataSetChanged();
+        loadEvents();
     }
 
     @Override
@@ -66,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         eventDbHelper = new EventDBHelper(getApplicationContext());
 
+        //  BottomNavigationBar
         spaceNavigationView = findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("HOME", R.drawable.ic_home_black_24dp));
@@ -117,14 +106,26 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     newText = newText.trim();
-                    if (!newText.isEmpty()) {
-                        eventAdapter.getFilter().filter(newText);
-                    }
+                    eventAdapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    loadEvents();
                     return false;
                 }
             });
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void loadEvents() {
+        eventList = eventDbHelper.getAll();
+        eventAdapter = new EventAdapter(getApplicationContext(), eventList);
+        recyclerView.setAdapter(eventAdapter);
+        eventAdapter.notifyDataSetChanged();
     }
 
 }

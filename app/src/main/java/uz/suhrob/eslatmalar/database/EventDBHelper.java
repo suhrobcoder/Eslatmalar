@@ -169,6 +169,4 @@ public class EventDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME2, ID + " = ?", new String[]{Integer.toString(id)});
     }
-
-    // TODO: get(, update)
 }

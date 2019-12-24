@@ -1,12 +1,9 @@
 package uz.suhrob.eslatmalar;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -191,11 +188,11 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 eventTimeText.setText(getResources().getString(R.string.event_time) + ": " + (hour > 9 ? hour : "0" + hour) + ":" + (minute > 9 ? minute : "0" + minute));
                 event.setTime(new Time(hour, minute));
-                settedTime.set(Calendar.HOUR, hour);
+                settedTime.set(Calendar.HOUR_OF_DAY, hour);
                 settedTime.set(Calendar.MINUTE, minute);
                 Log.d("TimeDialog", ""+hour + " " + minute);
             }
-        }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
@@ -203,7 +200,6 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                // TODO: korish kerak
                 eventDateText.setText("Eslatish sanasi: " + i2 + "-" + months[i1] + " " + i + "-yil");
                 event.setDate(new Date(i, i1, i2));
                 settedTime.set(Calendar.YEAR, i);
@@ -244,12 +240,12 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         }
     }
 
-    // TODO: Calendarni 24 soatlikka otkazish
     public static Calendar whenNextAlarm(Event event) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, event.getTime1().getHour());
+        calendar.set(Calendar.HOUR_OF_DAY, event.getTime1().getHour());
         calendar.set(Calendar.MINUTE, event.getTime1().getMinute());
-        Log.d("TimeDialog", ""+calendar.get(Calendar.HOUR));
+        calendar.set(Calendar.SECOND, 0);
+        Log.d("TimeDialog", ""+calendar.get(Calendar.HOUR_OF_DAY));
         while (!isPossibleDate(calendar, event.getFrequency1())) {
             calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400*1000);
         }
