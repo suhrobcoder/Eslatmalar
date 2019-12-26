@@ -54,7 +54,7 @@
         android:layout_gravity="bottom"
         app:active_item_color="@color/white"
         app:centre_button_color="@color/colorPrimary"
-        app:centre_button_icon="@drawable/ic_add_black_24dp"
+        app:centre_button_icon="@drawable/ic_add"
         app:inactive_item_color="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:space_background_color="@color/colorPrimaryLight"

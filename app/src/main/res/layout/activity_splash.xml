@@ -7,12 +7,13 @@
     tools:context="uz.suhrob.eslatmalar.SplashActivity">
 
     <ImageView
+        android:id="@+id/suhrob_logo_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_suhrob_logo_"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/suhrob_logo_view"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

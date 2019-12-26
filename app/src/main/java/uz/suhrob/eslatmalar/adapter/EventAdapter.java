@@ -46,7 +46,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.itemName.setText(eventList.get(position).getName());
         holder.itemContent.setText(eventList.get(position).getContent());
         if (!eventList.get(position).isActive()) {
-            holder.alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+            holder.alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off);
         }
     }
 
@@ -100,7 +100,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     int itemPos = getAdapterPosition();
                     if (eventList.get(itemPos).isActive()) {
                         eventList.get(itemPos).setActive(false);
-                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_off);
                         EventDBHelper dbHelper = new EventDBHelper(context);
                         dbHelper.changeActive(eventList.get(itemPos).getId(), false);
                         int notifyId = dbHelper.getNotifyIdWithEventId(eventList.get(itemPos).getId());
@@ -109,7 +109,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         Log.d("AdapterChanges", eventList.get(itemPos).getName() + " is deactivated");
                     } else {
                         eventList.get(itemPos).setActive(true);
-                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+                        alarmSwitchBtn.setImageResource(R.drawable.ic_alarm_on);
                         EventDBHelper dbHelper = new EventDBHelper(context);
                         dbHelper.changeActive(eventList.get(itemPos).getId(), true);
                         int notifyId = (int)dbHelper.insertNotify(new Notify(eventList.get(itemPos).getId()));

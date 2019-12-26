@@ -23,14 +23,14 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 SplashActivity.this.finish();
             }
-        }, 5000);
+        }, 4000);
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        AnimatedVectorDrawable anim = (AnimatedVectorDrawable) suhrobLogoView.getDrawable();
+        // TODO sinash kerak
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -38,6 +38,5 @@ public class SplashActivity extends AppCompatActivity {
                 anim.start();
             }
         }, 500);
-        anim.start();
     }
 }

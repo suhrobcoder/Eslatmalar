@@ -31,9 +31,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     List<Event> eventList;
-
     EventDBHelper eventDbHelper;
-
     EventAdapter eventAdapter;
 
     @Override
@@ -54,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         eventDbHelper = new EventDBHelper(getApplicationContext());
 
-        //  BottomNavigationBar
         spaceNavigationView = findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.addSpaceItem(new SpaceItem("HOME", R.drawable.ic_home_black_24dp));
-        spaceNavigationView.addSpaceItem(new SpaceItem("SETTINGS", R.drawable.ic_settings_black_24dp));
+        spaceNavigationView.addSpaceItem(new SpaceItem("HOME", R.drawable.ic_home));
+        spaceNavigationView.addSpaceItem(new SpaceItem("SETTINGS", R.drawable.ic_settings));
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false);
 
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
@@ -81,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemReselected(int itemIndex, String itemName) {}
         });
-
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,5 +121,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(eventAdapter);
         eventAdapter.notifyDataSetChanged();
     }
-
 }

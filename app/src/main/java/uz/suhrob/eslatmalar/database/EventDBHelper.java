@@ -91,26 +91,6 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public List<Event> getActives() {
-        List<Event> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + IS_ACTIVE + "=1", null);
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(new Event(cursor.getInt(cursor.getColumnIndex(ID)),
-                        EventType.valueOf(cursor.getString(cursor.getColumnIndex(EVENT_TYPE))),
-                        new Frequency(cursor.getString(cursor.getColumnIndex(FREQUENCY))),
-                        cursor.getString(cursor.getColumnIndex(NAME)),
-                        cursor.getString(cursor.getColumnIndex(CONTENT)),
-                        new Date(cursor.getString(cursor.getColumnIndex(DATE))),
-                        new Time(cursor.getString(cursor.getColumnIndex(TIME))),
-                        cursor.getInt(cursor.getColumnIndex(IS_ACTIVE))>0));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
-
     public Event getOne(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + ID + "=" + id, null);
@@ -127,7 +107,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return event;
     }
 
-    public boolean changeActive(int id, boolean active) {
+    public void changeActive(int id, boolean active) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         Event event = getOne(id);
@@ -137,9 +117,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         cv.put(CONTENT, event.getContent());
         cv.put(TIME, event.getTime());
         cv.put(IS_ACTIVE, active ? 1 : 0);
-        boolean updated = db.update(TABLE_NAME, cv, ID + " =?", new String[]{""+id}) > 0;
         db.close();
-        return updated;
     }
 
     public long insertNotify(Notify notify) {
@@ -155,14 +133,18 @@ public class EventDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + EVENT_ID + " FROM " + TABLE_NAME2 + " WHERE " + ID + "=" + id, null);
         cursor.moveToFirst();
-        return new Notify(id, cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
+        Notify notify = new Notify(id, cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
+        cursor.close();
+        return notify;
     }
 
     public int getNotifyIdWithEventId(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + ID + " FROM " + TABLE_NAME2 + " WHERE " + EVENT_ID + "=" + id, null);
         cursor.moveToFirst();
-        return cursor.getInt(cursor.getColumnIndex(ID));
+        int notifyId = cursor.getInt(cursor.getColumnIndex(ID));
+        cursor.close();
+        return notifyId;
     }
 
     public void deleteNotify(int id) {

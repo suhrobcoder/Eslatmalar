@@ -40,8 +40,8 @@ public class EventAlarm extends BroadcastReceiver {
 
         String eventName = intent.getExtras().getString(EVENT_NAME);
         String eventContent = intent.getExtras().getString(EVENT_CONTENT);
-
         int notificationId = intent.getExtras().getInt(NOTIFICATION_ID);
+
         Calendar calendar = Calendar.getInstance();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -76,9 +76,7 @@ public class EventAlarm extends BroadcastReceiver {
             calendar.setTimeInMillis(System.currentTimeMillis() + 86400*1000);
         }
 
-
         wl.release();
-
 
         if (!event.getType().equals(EventType.ONCE.name())) {
             setAlarm(context, calendar, eventName, eventContent, (int)new_id);
@@ -95,7 +93,6 @@ public class EventAlarm extends BroadcastReceiver {
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
         }
-
         Log.d("AlarmTime", calendar.toString());
     }
 

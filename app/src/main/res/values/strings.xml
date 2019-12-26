@@ -1,17 +1,15 @@
 <resources>
     <string name="app_name">Eslatmalar</string>
-    <string name="add_note">Eslatma qo`shish</string>
-    <string name="eslatma_nomi">Eslatma nomi</string>
+    <string name="add_event">Eslatma qo`shish</string>
+    <string name="event_name">Eslatma nomi</string>
     <string name="event_content">Eslatma matni</string>
     <string name="event_time">Eslatish vaqti</string>
+    <string name="event_date">Eslatish sanasi</string>
     <string name="save">Saqlash</string>
-    <string name="takrorlanish_turi">Takrorlanish turi: Bir marta</string>
+    <string name="repeat_type">Takrorlanish turi</string>
     <string name="everyday">Har kuni</string>
     <string name="week">Hafta bo`yicha</string>
-    <string name="takrorlanish_turi1">Takrorlanish turi</string>
-    <string name="search">Izlash</string>
-    <string name="ovqatlanish_demo">Ovqatlanish</string>
-    <string name="har_kuni_ertalab_ovqatlanish_demo">Har kuni ertalab ovqatlanish</string>
     <string name="once">Bir marta</string>
-    <string name="eslatish_sanasi">Eslatish sanasi</string>
+    <string name="search">Izlash</string>
+    <string name="switch_event">Eslatmani yoqib-o\'chirish</string>
 </resources>

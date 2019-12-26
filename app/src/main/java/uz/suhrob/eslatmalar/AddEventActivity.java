@@ -36,12 +36,11 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
     ConstraintLayout eventType, eventTimeLay, eventDateLay;
     LinearLayout weekLayout;
 
-    String[] months = {"Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"};
+    String[] months = {"yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"};
     boolean checkedDays[] = {false, false, false, false, false, false, false};
 
     Event event;
-
-    Calendar settedTime;
+    Calendar setTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +75,7 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         weekButtons[5] = findViewById(R.id.sh_week_btn);
         weekButtons[6] = findViewById(R.id.ya_week_btn);
 
-        settedTime = Calendar.getInstance();
-
+        setTime = Calendar.getInstance();
 
         final Calendar calendar = Calendar.getInstance();
         event.setTime(new Time(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
@@ -130,10 +128,10 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
                     if (event.getType().equals(EventType.WEEKLY.name())) {
                         alarm.setAlarm(getApplicationContext(), whenNextAlarm(event), event.getName(), event.getContent(), (int)new EventDBHelper(getApplicationContext()).insertNotify(new Notify((int)event_id)));
                     } else {
-                        if (settedTime.getTimeInMillis() < System.currentTimeMillis()) {
-                            settedTime.setTimeInMillis(settedTime.getTimeInMillis() + 86400*1000);
+                        if (setTime.getTimeInMillis() < System.currentTimeMillis()) {
+                            setTime.setTimeInMillis(setTime.getTimeInMillis() + 86400*1000);
                         }
-                        alarm.setAlarm(getApplicationContext(), settedTime, event.getName(), event.getContent(), (int)new EventDBHelper(getApplicationContext()).insertNotify(new Notify((int)event_id)));
+                        alarm.setAlarm(getApplicationContext(), setTime, event.getName(), event.getContent(), (int)new EventDBHelper(getApplicationContext()).insertNotify(new Notify((int)event_id)));
                     }
                     insertedDialog();
                 }
@@ -188,8 +186,8 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 eventTimeText.setText(getResources().getString(R.string.event_time) + ": " + (hour > 9 ? hour : "0" + hour) + ":" + (minute > 9 ? minute : "0" + minute));
                 event.setTime(new Time(hour, minute));
-                settedTime.set(Calendar.HOUR_OF_DAY, hour);
-                settedTime.set(Calendar.MINUTE, minute);
+                setTime.set(Calendar.HOUR_OF_DAY, hour);
+                setTime.set(Calendar.MINUTE, minute);
                 Log.d("TimeDialog", ""+hour + " " + minute);
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
@@ -200,11 +198,11 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                eventDateText.setText("Eslatish sanasi: " + i2 + "-" + months[i1] + " " + i + "-yil");
+                eventDateText.setText(getResources().getString(R.string.event_date) + ": " + i2 + "-" + months[i1] + " " + i + "-yil");
                 event.setDate(new Date(i, i1, i2));
-                settedTime.set(Calendar.YEAR, i);
-                settedTime.set(Calendar.MONTH, i1);
-                settedTime.set(Calendar.DAY_OF_MONTH, i2);
+                setTime.set(Calendar.YEAR, i);
+                setTime.set(Calendar.MONTH, i1);
+                setTime.set(Calendar.DAY_OF_MONTH, i2);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();

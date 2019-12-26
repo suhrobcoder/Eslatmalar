@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="uz.suhrob.eslatmalar.AddEventActivity">
 
+    <!--TODO dizaynni o'zgartirish kerak-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +21,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/eslatma_nomi"
+                android:hint="@string/event_name"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:id="@+id/event_title"/>
@@ -63,7 +65,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigate_next_black_24dp"
+                android:src="@drawable/ic_navigate_next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -87,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/takrorlanish_turi"
+                android:text="@string/repeat_type"
                 android:textSize="20sp"
                 android:id="@+id/repeat_type"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +99,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigate_next_black_24dp"
+                android:src="@drawable/ic_navigate_next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -209,7 +211,7 @@
                 android:id="@+id/event_date"
                 android:layout_width="wrap_content"
                 android:layout_height="23dp"
-                android:text="@string/eslatish_sanasi"
+                android:text="@string/event_date"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -218,7 +220,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigate_next_black_24dp"
+                android:src="@drawable/ic_navigate_next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
