@@ -20,7 +20,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/once_type"

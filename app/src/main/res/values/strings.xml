@@ -3,8 +3,6 @@
     <string name="add_event">Eslatma qo`shish</string>
     <string name="event_name">Eslatma nomi</string>
     <string name="event_content">Eslatma matni</string>
-    <string name="event_time">Eslatish vaqti</string>
-    <string name="event_date">Eslatish sanasi</string>
     <string name="save">Saqlash</string>
     <string name="repeat_type">Takrorlanish turi</string>
     <string name="everyday">Har kuni</string>

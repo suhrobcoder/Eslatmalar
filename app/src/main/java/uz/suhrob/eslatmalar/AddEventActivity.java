@@ -47,12 +47,12 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        getSupportActionBar().setTitle(R.string.add_note);
+        getSupportActionBar().setTitle(R.string.add_event);
 
         eventTitleText = findViewById(R.id.event_title);
         eventContentText = findViewById(R.id.event_content);
-        eventTimeText = findViewById(R.id.event_time);
-        eventDateText = findViewById(R.id.event_date);
+        eventTimeText = findViewById(R.id.time_text_view);
+        eventDateText = findViewById(R.id.date_text_view);
 
         eventType = findViewById(R.id.event_type);
         eventTimeLay = findViewById(R.id.event_time_l);
@@ -79,7 +79,8 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
 
         final Calendar calendar = Calendar.getInstance();
         event.setTime(new Time(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
-        eventTimeText.setText(String.format(Locale.getDefault(), "Eslatish vaqti: %d:%d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+        eventTimeText.setText(getTimeText(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+        eventDateText.setText(getDateText(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)));
 
         eventType.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,14 +178,14 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
                 }
             }
         }
-        repeatType.setText(getResources().getString(R.string.takrorlanish_turi1) + ": " + item);
+        repeatType.setText(getResources().getString(R.string.repeat_type) + ": " + item);
     }
 
     public void showTimePickerDialog(Calendar calendar) {
         TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                eventTimeText.setText(getResources().getString(R.string.event_time) + ": " + (hour > 9 ? hour : "0" + hour) + ":" + (minute > 9 ? minute : "0" + minute));
+                eventTimeText.setText(getTimeText(hour, minute));
                 event.setTime(new Time(hour, minute));
                 setTime.set(Calendar.HOUR_OF_DAY, hour);
                 setTime.set(Calendar.MINUTE, minute);
@@ -198,7 +199,7 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                eventDateText.setText(getResources().getString(R.string.event_date) + ": " + i2 + "-" + months[i1] + " " + i + "-yil");
+                eventDateText.setText(getDateText(i2, i1, i));
                 event.setDate(new Date(i, i1, i2));
                 setTime.set(Calendar.YEAR, i);
                 setTime.set(Calendar.MONTH, i1);
@@ -260,4 +261,11 @@ public class AddEventActivity extends AppCompatActivity implements ActionBottomS
         return false;
     }
 
+    public String getTimeText(int hour, int minute) {
+        return String.valueOf((hour < 10 ? "0" + hour : hour)) + ":" + (minute < 10 ? "0" + minute : minute);
+    }
+
+    public String getDateText(int day, int month, int year) {
+        return String.valueOf(day + "-" + months[month] + " " + year + "-yil");
+    }
 }

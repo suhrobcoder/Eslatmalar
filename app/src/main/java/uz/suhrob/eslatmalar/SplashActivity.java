@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 public class SplashActivity extends AppCompatActivity {
@@ -30,10 +31,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // TODO sinash kerak
+        suhrobLogoView.setVisibility(View.INVISIBLE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                suhrobLogoView.setVisibility(View.VISIBLE);
                 AnimatedVectorDrawable anim = (AnimatedVectorDrawable) suhrobLogoView.getDrawable();
                 anim.start();
             }

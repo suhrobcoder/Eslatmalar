@@ -50,17 +50,37 @@
             android:gravity="center_vertical"
             android:paddingBottom="10dp"
             android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time"
+                android:id="@+id/ic_time_view"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/event_time"
-                android:textSize="20sp"
-                android:id="@+id/event_time"
+                android:layout_marginStart="8dp"
+                android:textColor="#000"
+                android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/ic_time_view"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/time_text_view"/>
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/event_time"-->
+                <!--android:textSize="20sp"-->
+                <!--android:id="@+id/event_time"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
 
             <ImageView
                 android:layout_width="30dp"
@@ -69,7 +89,49 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="5dp"
+                tools:ignore="ContentDescription" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/event_date_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_date"
+                android:id="@+id/ic_date_view"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="#000"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/ic_date_view"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/date_text_view"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_navigate_next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
         </android.support.constraint.ConstraintLayout>
@@ -84,6 +146,7 @@
             android:focusable="true"
             android:paddingBottom="10dp"
             android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -103,7 +166,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="5dp"
                 tools:ignore="ContentDescription" />
 
         </android.support.constraint.ConstraintLayout>
@@ -194,42 +256,6 @@
                 />
 
         </LinearLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/event_date_l"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingBottom="10dp"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:id="@+id/event_date"
-                android:layout_width="wrap_content"
-                android:layout_height="23dp"
-                android:text="@string/event_date"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigate_next"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="5dp"
-                tools:ignore="ContentDescription" />
-
-        </android.support.constraint.ConstraintLayout>
-
-
 
         <Button
             android:layout_width="wrap_content"
